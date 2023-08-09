@@ -1,0 +1,22 @@
+Battleship Application:
+
+Game Class:
+
+Gameboard class:
+    board area status (2d array of enum - (hit, sink, unknown, miss))
+    ship map (2d array representing ship placement on gameboard)
+    
+Player Class:
+    Name
+    Ships
+    board
+
+Ship Class:
+    length
+    start coordinates
+    end coordinates
+    alive or dead
+
+    members:
+    - isalive
+    - isalive
