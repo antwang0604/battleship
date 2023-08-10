@@ -5,7 +5,7 @@
 #include <types.h>
 #include <iostream>
 #include <ship.h>
-
+#include <string>
 
 class Board {
 public:
@@ -18,36 +18,56 @@ public:
         };
 
     void ShowMap() {
+        PrintTopBorder();
+        //ASCII "A" is 65
+        int row_count = 65;
         for(auto curr_row:ship_map){
-            std::cout << "|";
+            std::cout << static_cast<char>(row_count) << "|";
             for(auto curr_cell:curr_row){
                 if(curr_cell == -1){
-                    std::cout << "  |";
+                    std::cout << "   |";
                 } else{
-                    std::cout << " " << curr_cell << "|";
+                    std::cout << " " << curr_cell << " |";
                 }
             }
+            row_count++;
             std::cout << std::endl;
         }
     }
+    void PrintTopBorder() {
+        std::cout << "  ";
+        for(int i=0;i<board_size;i++) {
+            std::cout << " " << i << " |";
+        }
+        std::cout << std::endl;      
+        std::cout << "--";
+        for(int i=0;i<board_size;i++) {
+            std::cout << "----";
+        }  
+        std::cout << std::endl;      
+    }
 
     void DisplayBoard(){
+        PrintTopBorder();
+        //ASCII "A" is 65
+        int row_count = 65;
         for(auto curr_row:board){
-            std::cout << "|";
+            std::cout << static_cast<char>(row_count) << "|";
             for(auto curr_cell:curr_row){
                 if(curr_cell == CellStatus::unknown) {
-                    std::cout << "  |";
+                    std::cout << "   |";
                 }
                 else if(curr_cell == CellStatus::hit) {
-                    std::cout << " □|";
+                    std::cout << " □ |";
                 }
                 else if(curr_cell == CellStatus::sink) {
-                    std::cout << " ■|";
+                    std::cout << " ■ |";
                 }
                 else if(curr_cell == CellStatus::miss) {
-                    std::cout << " X|";
+                    std::cout << " X |";
                 }
             }
+            row_count++;
             std::cout << std::endl;
         }
     }
@@ -62,13 +82,13 @@ public:
         std::vector<std::pair<int,int>> coords;
 
         if(ship.GetOrientation() == Orientation::horizontal){
-            for(int i=0;i<3;i++){
-                coords.push_back(std::make_pair(start_x+i,start_y));
+            for(int i=0; i<ship.GetLength(); i++){
+                coords.push_back(std::make_pair(start_x,start_y+i));
             }
         } 
         else if(ship.GetOrientation() == Orientation::vertical){
-            for(int i=0;i<3;i++){
-                coords.push_back(std::make_pair(start_x,start_y+i));
+            for(int i=0; i<ship.GetLength(); i++){
+                coords.push_back(std::make_pair(start_x+i,start_y));
             }
         } else {
             return false;
@@ -122,6 +142,7 @@ public:
         // if lands on nothing
         if(ship_map[x][y] == -1){
             board[x][y] = CellStatus::miss;
+            std::cout << "MISS!" << std::endl;
         }
         // if lands on empty land
         else{
@@ -129,8 +150,10 @@ public:
             ship_ids[ship_id].RegisterLandedShot();
             if(ship_ids[ship_id].IsAlive()){
                 board[x][y] = CellStatus::hit;
+                std::cout << "HIT!" << std::endl;
             } else {
                 HandleShipSunk(x,y,ship_id);
+                std::cout << "HIT AND SINK!" << std::endl;
             }
         }
     }

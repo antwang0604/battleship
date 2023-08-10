@@ -15,6 +15,21 @@ public:
         ship_length = std::max(delta_x,delta_y) + 1;
     }
 
+    Ship(int start_x, int start_y, Orientation orientation, int length) : 
+    start_x(start_x), start_y(start_y), orientation(orientation), ship_length(length)
+    {
+        if(orientation == Orientation::horizontal) {
+            end_x = start_x;
+            end_y = start_y+ship_length-1;
+        } else if(orientation == Orientation::vertical) {
+            end_x = start_x+ship_length-1;
+            end_y = start_y;
+        } else {
+            end_x = -1;
+            start_x = -1;
+        }
+    }
+
     bool IsAlive(){
         return alive;
     }
@@ -63,6 +78,10 @@ public:
 
     Orientation GetOrientation(){
         return orientation;
+    }
+
+    int GetLength() { 
+        return ship_length;
     }
 
 private:

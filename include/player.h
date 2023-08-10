@@ -18,9 +18,6 @@ public:
     }
     bool PlayNextMove(int x, int y){
         if(board.EvaluateShot(x,y)) {
-            std::cout << "Striking at Location (" << x << "," << y << ")" << std::endl;
-            board.DisplayBoard();
-            board.ShowMap();
             return true;
         } else {
             std::cout << "Not a Valid Shot" << std::endl;
@@ -38,12 +35,32 @@ public:
         }
         return success;
     }
-    int ship_count=0;
-    
+
+    bool AddShip(int start_x, int start_y, Orientation orientation, int length) {
+        auto ship = Ship(start_x, start_y, orientation, length);
+        bool success = board.AddShip(ship);
+        if(success) {
+            std::cout << "Ship Added!" << std::endl;
+            ship_count++;
+        } else {
+            std::cout << "Unable to Add Ship" << std::endl;
+        }
+        return success;
+    }
+
+    int GetShipCount(){
+        return ship_count;
+    }
+
+    void PrintGameBoard() {
+        board.DisplayBoard();
+    }
+
     void PrintShipMap(){
         board.ShowMap();
     }
 private:
+    int ship_count=0;
     Board board;
     std::string name;
 };
